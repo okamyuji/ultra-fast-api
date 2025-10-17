@@ -1,0 +1,8 @@
+{
+  "apiBaseUrl": "http://localhost:8000",
+  "defaultPageLimit": 20,
+  "defaultLocale": "ja",
+  "connectTimeout": 30,
+  "receiveTimeout": 30,
+  "tokenRefreshThreshold": 10
+}

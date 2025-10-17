@@ -1,0 +1,13 @@
+appId: com.example.ultra_fast_api
+---
+- launchApp
+- tapOn: "ログイン"
+- inputText: "test@example.com"
+- tapOn: "パスワード"
+- inputText: "Password123"
+- tapOn: "ログイン"
+- tapOn: "商品一覧を見る"
+- tapOn: "商品を検索..."
+- inputText: "商品"
+- pressKey: Enter
+- assertVisible: "商品"

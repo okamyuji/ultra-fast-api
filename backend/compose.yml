@@ -1,0 +1,59 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: ultra_fast_db
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-ultra_fast_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ultra_fast_network
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ultra_fast_api
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-ultra_fast_db}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-secret-key-change-in-prod}
+      JWT_ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_HOURS: 24
+      REFRESH_TOKEN_EXPIRE_DAYS: 30
+      PYTHONUNBUFFERED: 1
+      SEED_DATA: ${SEED_DATA:-false}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src
+      - ./scripts:/app/scripts
+      - ./tests:/app/tests
+    command: >
+      sh -c "
+      chmod +x /app/scripts/seed_on_startup.sh &&
+      /app/scripts/seed_on_startup.sh &&
+      uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+    networks:
+      - ultra_fast_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  ultra_fast_network:
+    driver: bridge

@@ -1,0 +1,39 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.14.1
+    hooks:
+      - id: ruff-format
+        description: "Ruff formatting"
+        types_or: [python, pyi, jupyter]
+      - id: ruff
+        description: "Ruff linting"
+        types_or: [python, pyi, jupyter]
+        args: [--fix, --exit-non-zero-on-fix]
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.18.2
+    hooks:
+      - id: mypy
+        description: "Run mypy"
+        types: [python]
+        files: ^src/
+        exclude: ^(alembic|tests|scripts)/
+        additional_dependencies:
+          - "pydantic>=2.0"
+          - "sqlalchemy>=2.0"
+          - "types-passlib"
+          - "types-python-jose"
+        args: [--ignore-missing-imports]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        files: ^(src|tests)/.*\.(py|yml|yaml|md)$
+      - id: end-of-file-fixer
+        files: ^(src|tests)/.*\.(py|yml|yaml|md)$
+      - id: check-yaml
+        exclude: (^\.maestro/|frontend/)
+      - id: check-added-large-files
+        args: ["--maxkb=1000"]
+      - id: check-merge-conflict

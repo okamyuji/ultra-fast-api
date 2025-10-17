@@ -1,0 +1,11 @@
+appId: com.example.ultra_fast_api
+---
+- launchApp
+- tapOn: "ログイン"
+- inputText: "test@example.com"
+- tapOn: "パスワード"
+- inputText: "Password123"
+- tapOn: "ログイン"
+- tapOn:
+    point: "90%,10%"  # 設定アイコンの位置
+- assertVisible: "設定"

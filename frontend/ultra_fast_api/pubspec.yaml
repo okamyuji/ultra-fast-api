@@ -1,0 +1,71 @@
+name: ultra_fast_api
+description: "Ultra-fast API Flutter client with Riverpod 3.x"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.9.2 <4.0.0'
+  flutter: '>=3.35.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management - Riverpod 3.x
+  flutter_riverpod: ^3.0.2
+  riverpod_annotation: ^3.0.1
+
+  # HTTP Client
+  dio: ^5.7.0
+
+  # Secure Storage
+  flutter_secure_storage: ^9.2.2
+
+  # Routing
+  go_router: ^16.2.5
+
+  # UI Components
+  cupertino_icons: ^1.0.8
+
+  # Utilities
+  intl: ^0.20.1
+  json_annotation: ^4.9.0
+  freezed_annotation: ^3.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  # Linting
+  flutter_lints: ^6.0.0
+
+  # Code Generation
+  build_runner: ^2.4.13
+  riverpod_generator: ^3.0.2
+  custom_lint: ^0.8.0
+  riverpod_lint: ^3.0.1
+  json_serializable: ^6.9.2
+
+  # Testing
+  mockito: ^5.5.0
+
+  # Freezed
+  freezed: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Assets
+  assets:
+    - config/app_config.json
+    - config/app_config.dev.json
+    - config/app_config.prod.json
+
+  # Fonts
+  # fonts:
+  #   - family: Roboto
+  #     fonts:
+  #       - asset: fonts/Roboto-Regular.ttf
+  #       - asset: fonts/Roboto-Bold.ttf
+  #         weight: 700

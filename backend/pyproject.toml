@@ -1,0 +1,109 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ultra-fast-api"
+version = "0.1.0"
+description = "Ultra-fast API with FastAPI, PostgreSQL, and Flutter"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = {text = "MIT"}
+authors = [
+    {name = "Developer", email = "dev@example.com"}
+]
+keywords = ["fastapi", "postgresql", "flutter", "async"]
+
+dependencies = [
+    "fastapi==0.119.0",
+    "uvicorn[standard]==0.37.0",
+    "pydantic==2.12.3",
+    "pydantic-settings==2.11.0",
+    "sqlalchemy==2.0.44",
+    "asyncpg==0.30.0",
+    "alembic==1.17.0",
+    "python-jose[cryptography]==3.5.0",
+    "passlib[bcrypt]==1.7.4",
+    "python-multipart==0.0.20",
+    "bcrypt==4.2.1",
+    "python-dotenv==1.1.1",
+    "httpx==0.28.1",
+    "pytz==2025.2",
+    "email-validator==2.3.0",
+    "greenlet==3.2.4",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==8.4.2",
+    "pytest-asyncio==1.2.0",
+    "pytest-cov==7.0.0",
+    "aiosqlite==0.21.0",
+    "ruff==0.14.1",
+    "mypy==1.18.2",
+    "ipython==9.6.0",
+    "black==25.9.0",
+    "psycopg2-binary>=2.9.11",
+    "pre-commit>=4.3.0",
+]
+
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/app"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+exclude = [
+    ".git",
+    ".venv",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    "alembic",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "C",
+    "B",
+    "UP",
+]
+ignore = [
+    "E501",  # Line too long (handled by formatter)
+    "C901",  # Function is too complex
+    "B008",  # Do not perform function calls in argument defaults (FastAPI Depends pattern)
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+combine-as-imports = true
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "--strict-markers -v -m 'not performance'"
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks tests as integration",
+    "performance: marks tests as performance tests (requires live database)",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning:passlib.*",
+    "ignore::DeprecationWarning:jose.*",
+]

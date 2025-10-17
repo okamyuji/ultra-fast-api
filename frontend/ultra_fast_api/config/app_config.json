@@ -1,0 +1,7 @@
+{
+  "apiBaseUrl": "http://192.168.0.15:8000",
+  "defaultPageLimit": 20,
+  "connectTimeout": 30,
+  "receiveTimeout": 30,
+  "tokenRefreshThreshold": 10
+}
