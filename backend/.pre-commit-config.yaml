@@ -22,7 +22,6 @@ repos:
           - "pydantic>=2.0"
           - "sqlalchemy>=2.0"
           - "types-passlib"
-          - "types-python-jose"
         args: [--ignore-missing-imports]
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
