@@ -6,7 +6,8 @@ from datetime import UTC, datetime, timedelta
 from typing import Any, cast
 from uuid import UUID
 
-from jose import JWTError, jwt
+import jwt
+from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
 
 from app.config import settings
@@ -72,7 +73,7 @@ def decode_jwt_token(token: str) -> dict[str, Any]:
             algorithms=[settings.jwt_algorithm],
         )
         return cast(dict[str, Any], payload)
-    except JWTError as e:
+    except InvalidTokenError as e:
         raise ValueError(f"トークンが無効です: {str(e)}") from e
 
 
