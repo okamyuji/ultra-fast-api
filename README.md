@@ -184,7 +184,7 @@ cd ultra-fast-api
 ```bash
 cd backend
 
-# 環境変数設定（任意）
+# 環境変数設定（JWT_SECRET_KEY は必須）
 cat > .env << EOF
 DB_USER=postgres
 DB_PASSWORD=postgres
