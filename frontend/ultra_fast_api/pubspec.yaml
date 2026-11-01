@@ -17,7 +17,7 @@ dependencies:
   riverpod_annotation: ^3.0.1
 
   # HTTP Client
-  dio: ^5.7.0
+  dio: ^5.11.1
 
   # Secure Storage
   flutter_secure_storage: ^9.2.2
@@ -29,7 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # Utilities
-  intl: ^0.20.1
+  intl: ^0.20.3
   json_annotation: ^4.9.0
   freezed_annotation: ^3.0.1
 
@@ -41,11 +41,11 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
   # Code Generation
-  build_runner: ^2.4.13
+  build_runner: ^2.15.1
   riverpod_generator: ^3.0.2
   custom_lint: ^0.8.0
   riverpod_lint: ^3.0.1
-  json_serializable: ^6.9.2
+  json_serializable: ^6.11.2
 
   # Testing
   mockito: ^5.5.0
