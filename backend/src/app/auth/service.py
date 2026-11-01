@@ -196,6 +196,8 @@ class AuthService:
         # パスワード更新
         user.password_hash = hash_password(new_password)
         user.updated_at = datetime.now(UTC)
+        # 盗まれたセッションをパスワード変更で切る
+        await self._revoke_refresh_tokens(user.id)
 
         self.db.add(user)
         await self.db.commit()
@@ -286,6 +288,14 @@ class AuthService:
         Returns:
             bool: 成功した場合True
         """
+        if not await self._revoke_refresh_tokens(user_id, device_id):
+            return False
+
+        await self.db.commit()
+        return True
+
+    async def _revoke_refresh_tokens(self, user_id: UUID, device_id: str | None = None) -> int:
+        """未取り消しのリフレッシュトークンを取り消す。commit は呼び出し側が同じ transaction で行う"""
         query = select(RefreshToken).where(RefreshToken.user_id == user_id, RefreshToken.revoked_at.is_(None))
 
         if device_id:
@@ -294,15 +304,10 @@ class AuthService:
         result = await self.db.execute(query)
         tokens: Sequence[RefreshToken] = result.scalars().all()
 
-        if not tokens:
-            return False
-
-        # すべてのトークンを無効化
         for token in tokens:
             token.revoked_at = datetime.now(UTC)
 
-        await self.db.commit()
-        return True
+        return len(tokens)
 
     # ーーーーーー パスワードリセット ーーーーーー
 
@@ -398,6 +403,7 @@ class AuthService:
 
         # トークンを使用済みにする
         db_token.used_at = datetime.now(UTC)
+        await self._revoke_refresh_tokens(user.id)
 
         await self.db.commit()
         return True

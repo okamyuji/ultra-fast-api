@@ -131,3 +131,45 @@ async def test_request_password_reset_does_not_return_the_token(client: AsyncCli
 
     assert response.status_code == 200
     assert "token" not in response.json()
+
+
+NEW_PASSWORD = "AnotherPassword456!"
+
+
+async def _login_with_stored_refresh(service: AuthService):
+    await _register(service)
+    user = await service.login_user(UserLoginSchema(email="flow@example.com", password=PASSWORD))
+    token = service.create_refresh_token(str(user.id), "web-client")
+    await service.store_refresh_token(user.id, token, "web-client")
+    return user, token
+
+
+@pytest.mark.asyncio
+async def test_change_password_revokes_existing_refresh_tokens(db_session: AsyncSession):
+    service = AuthService(db_session)
+    user, token = await _login_with_stored_refresh(service)
+
+    await service.change_password(user.id, PASSWORD, NEW_PASSWORD)
+
+    with pytest.raises(ValueError):
+        await service.refresh_access_token(token)
+
+
+@pytest.mark.asyncio
+async def test_confirm_password_reset_revokes_existing_refresh_tokens(db_session: AsyncSession):
+    service = AuthService(db_session)
+    _, token = await _login_with_stored_refresh(service)
+    reset_token = await service.request_password_reset("flow@example.com")
+
+    await service.confirm_password_reset(reset_token, NEW_PASSWORD)
+
+    with pytest.raises(ValueError):
+        await service.refresh_access_token(token)
+
+
+@pytest.mark.asyncio
+async def test_refresh_failure_does_not_reveal_the_reason(client: AsyncClient):
+    expired_or_unknown = await client.post("/auth/refresh", json={"refresh_token": "not-a-real-token"})
+
+    assert expired_or_unknown.status_code == 401
+    assert expired_or_unknown.json()["detail"] == "リフレッシュトークンが無効です"

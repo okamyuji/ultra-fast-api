@@ -142,7 +142,8 @@ async def refresh_token(
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=str(e),
+            # 期限切れか未登録かを区別させない
+            detail="リフレッシュトークンが無効です",
             headers={"WWW-Authenticate": "Bearer"},
         ) from e
 
