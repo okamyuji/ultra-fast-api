@@ -19,7 +19,7 @@ class TestProductsService:
     @pytest.fixture
     async def test_user(self, db_session: AsyncSession):
         """テストユーザーを作成"""
-        from src.app.auth.utils import hash_password
+        from app.auth.security import hash_password
 
         user = User(
             username="testuser",

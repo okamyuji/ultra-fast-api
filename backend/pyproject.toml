@@ -25,12 +25,11 @@ dependencies = [
     "alembic==1.20.1",
     "mako==1.4.3",
     "pyjwt[crypto]==2.15.1",
-    "passlib[bcrypt]==1.7.4",
     "python-multipart==0.0.32",
-    "bcrypt==4.2.1",
+    "bcrypt==5.0.0",
     "python-dotenv==1.2.4",
     "httpx==0.28.1",
-    "pytz==2025.2",
+    "pytz==2026.6",
     "email-validator==2.3.0",
     "greenlet==3.5.6",
 ]
@@ -43,7 +42,7 @@ dev = [
     "pygments==2.21.0",
     "aiosqlite==0.22.1",
     "ruff==0.17.3",
-    "mypy==1.18.2",
+    "mypy==2.4.1",
     "ipython==9.17.1",
     "black==26.10.1",
     "psycopg2-binary>=2.9.11",
@@ -107,6 +106,5 @@ markers = [
     "performance: marks tests as performance tests (requires live database)",
 ]
 filterwarnings = [
-    "ignore::DeprecationWarning:passlib.*",
     "ignore::DeprecationWarning:jose.*",
 ]
