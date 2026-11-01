@@ -87,6 +87,8 @@ combine-as-imports = true
 
 [tool.mypy]
 python_version = "3.12"
+# BaseSettings のフィールドを環境変数から入る値として扱わせる
+plugins = ["pydantic.mypy"]
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false

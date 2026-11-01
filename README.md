@@ -185,11 +185,11 @@ cd ultra-fast-api
 cd backend
 
 # 環境変数設定（任意）
-cat > .env << 'EOF'
+cat > .env << EOF
 DB_USER=postgres
 DB_PASSWORD=postgres
 DB_NAME=ultra_fast_db
-JWT_SECRET_KEY=your-secret-key-change-in-production
+JWT_SECRET_KEY=$(openssl rand -hex 32)
 SEED_DATA=false
 EOF
 
@@ -776,8 +776,8 @@ DB_USER=postgres
 DB_PASSWORD=postgres
 DB_NAME=ultra_fast_db
 
-# JWT設定
-JWT_SECRET_KEY=your-secret-key-change-in-production
+# JWT設定（openssl rand -hex 32 の出力。例の値や 32 文字未満の値では起動しない）
+JWT_SECRET_KEY=<openssl rand -hex 32 の出力>
 JWT_ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_HOURS=24
 REFRESH_TOKEN_EXPIRE_DAYS=30
@@ -796,7 +796,7 @@ SEED_DATA=false
 
 ⚠️ **本番環境注意**: 本番環境では `SEED_DATA=false` に設定し、誤ってデータ生成しないように注意してください。
 
-⚠️ **JWT_SECRET_KEY**: 本番環境では必ず強力なシークレットキーに変更してください（`openssl rand -hex 32`で生成可能）。
+⚠️ **JWT_SECRET_KEY**: 必須です。`openssl rand -hex 32` で生成した値を設定してください。未設定、例の値、32 文字未満の値では起動しません。
 
 ⚠️ **HTTP接続**: 開発環境では `http://192.168.0.15:8000` を使用していますが、本番環境では必ずHTTPSを使用してください。
 

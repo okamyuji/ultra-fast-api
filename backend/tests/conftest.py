@@ -2,7 +2,12 @@
 テスト設定とフィクスチャ - TDD基盤
 """
 
+import os
+import secrets
 from collections.abc import AsyncGenerator
+
+# app.config は読み込んだ時点で設定を作り、JWT_SECRET_KEY を必須にしている
+os.environ.setdefault("JWT_SECRET_KEY", secrets.token_hex(32))
 
 import pytest
 import pytest_asyncio
