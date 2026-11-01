@@ -2,6 +2,8 @@
 auth/router.py - 認証APIエンドポイント
 """
 
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -57,6 +59,7 @@ async def login(
         access_token = service.create_access_token(user.id)
         # TODO: 実際のデバイス情報を取得
         refresh_token = service.create_refresh_token(user.id, device_id="web-client")
+        await service.store_refresh_token(user.id, refresh_token, device_id="web-client")
 
         from app.config import settings
 
@@ -122,7 +125,7 @@ async def refresh_token(
         payload = verify_access_token(new_access_token)
         user_id = payload.get("sub")
 
-        user = await service.get_user_by_id(user_id)
+        user = await service.get_user_by_id(UUID(user_id))
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -165,13 +168,13 @@ async def request_password_reset(
 ) -> dict[str, str]:
     """パスワードリセットリクエスト
 
-    Note: 本番環境ではメールが送信されますが、開発環境ではトークンを返します。
+    Note: トークンは応答に含めない。応答に含めると、メールアドレスを知るだけで
+    他人のパスワードを再設定でき、利用者の有無も分かってしまう。
     """
     service = AuthService(db)
-    reset_token = await service.request_password_reset(reset_request.email)
+    await service.request_password_reset(reset_request.email)
 
-    # 開発環境用: トークンを返す（本番環境では削除）
-    return {"message": "Password reset email sent", "token": reset_token}
+    return {"message": "Password reset email sent"}
 
 
 @router.post("/confirm-password-reset", status_code=status.HTTP_200_OK)

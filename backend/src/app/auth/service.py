@@ -3,6 +3,7 @@ auth/service.py - 認証ビジネスロジック（TDD実装）
 """
 
 import re
+import secrets
 from collections.abc import Sequence
 from datetime import UTC, datetime, timedelta
 from typing import cast
@@ -12,10 +13,22 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.schemas import UserLoginSchema, UserRegisterSchema
-from app.auth.security import create_jwt_token, hash_password, verify_access_token, verify_password
+from app.auth.security import (
+    create_jwt_token,
+    decode_jwt_token,
+    hash_password,
+    hash_token,
+    verify_password,
+)
 from app.config import settings
 from app.database.models.token import PasswordResetToken, RefreshToken
 from app.database.models.user import User
+
+
+def _is_expired(expires_at: datetime) -> bool:
+    # SQLite はタイムゾーン付きの列でも naive な値を返すので、UTC とみなして比べる
+    aware = expires_at if expires_at.tzinfo else expires_at.replace(tzinfo=UTC)
+    return aware < datetime.now(UTC)
 
 
 class AuthService:
@@ -134,9 +147,28 @@ class AuthService:
         return cast(
             str,
             create_jwt_token(
-                data={"sub": str(user_id), "device_id": device_id, "token_type": "refresh"}, expires_delta=expires_delta
+                data={
+                    "sub": str(user_id),
+                    "device_id": device_id,
+                    "token_type": "refresh",
+                    # 同じ秒に発行しても token_hash の一意制約に当たらないようにする
+                    "jti": secrets.token_urlsafe(16),
+                },
+                expires_delta=expires_delta,
             ),
         )
+
+    async def store_refresh_token(self, user_id: UUID, refresh_token: str, device_id: str) -> None:
+        """発行したリフレッシュトークンを、更新のときに照合できるよう保存する"""
+        self.db.add(
+            RefreshToken(
+                user_id=user_id,
+                token_hash=hash_token(refresh_token),
+                device_id=device_id,
+                expires_at=datetime.now(UTC) + timedelta(days=settings.refresh_token_expire_days),
+            )
+        )
+        await self.db.commit()
 
     def verify_token(self, token: str) -> dict:
         """トークンを検証して ペイロードを取得"""
@@ -182,7 +214,7 @@ class AuthService:
         """
         # リフレッシュトークンを検証
         try:
-            payload = verify_access_token(refresh_token_str)
+            payload = decode_jwt_token(refresh_token_str)
         except ValueError as e:
             raise ValueError(f"無効なリフレッシュトークンです: {e}") from e
 
@@ -202,7 +234,7 @@ class AuthService:
             raise ValueError("ユーザーが見つからないか無効です")
 
         # DBのリフレッシュトークンを確認
-        token_hash = hash_password(refresh_token_str)
+        token_hash = hash_token(refresh_token_str)
         result = await self.db.execute(
             select(RefreshToken)
             .where(RefreshToken.user_id == user.id)
@@ -215,7 +247,7 @@ class AuthService:
             raise ValueError("リフレッシュトークンが見つからないか無効です")
 
         # トークンの有効期限確認
-        if db_token.expires_at < datetime.now(UTC):
+        if _is_expired(db_token.expires_at):
             raise ValueError("リフレッシュトークンの有効期限が切れています")
 
         # 古いトークンを無効化
@@ -228,7 +260,7 @@ class AuthService:
         # 新しいリフレッシュトークンをDBに保存
         new_db_token = RefreshToken(
             user_id=user.id,
-            token_hash=hash_password(new_refresh_token),
+            token_hash=hash_token(new_refresh_token),
             device_id=device_id,
             device_name=db_token.device_name,
             device_type=db_token.device_type,
@@ -304,10 +336,8 @@ class AuthService:
             token.used_at = datetime.now(UTC)
 
         # リセットトークンを生成（1時間有効）
-        import secrets
-
         reset_token = secrets.token_urlsafe(32)
-        token_hash = hash_password(reset_token)
+        token_hash = hash_token(reset_token)
 
         # DBに保存
         db_token = PasswordResetToken(
@@ -340,7 +370,7 @@ class AuthService:
             raise ValueError("新しいパスワードが要件を満たしていません")
 
         # トークンハッシュを生成
-        token_hash = hash_password(token)
+        token_hash = hash_token(token)
 
         # DBからトークンを検索
         result = await self.db.execute(
@@ -354,7 +384,7 @@ class AuthService:
             raise ValueError("無効または期限切れのリセットトークンです")
 
         # 有効期限確認
-        if db_token.expires_at < datetime.now(UTC):
+        if _is_expired(db_token.expires_at):
             raise ValueError("リセットトークンの有効期限が切れています")
 
         # ユーザーを取得

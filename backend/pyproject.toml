@@ -25,7 +25,6 @@ dependencies = [
     "alembic==1.20.1",
     "mako==1.4.3",
     "pyjwt[crypto]==2.15.1",
-    "passlib[bcrypt]==1.7.4",
     "python-multipart==0.0.32",
     "bcrypt==5.0.0",
     "python-dotenv==1.2.4",
@@ -107,6 +106,5 @@ markers = [
     "performance: marks tests as performance tests (requires live database)",
 ]
 filterwarnings = [
-    "ignore::DeprecationWarning:passlib.*",
     "ignore::DeprecationWarning:jose.*",
 ]

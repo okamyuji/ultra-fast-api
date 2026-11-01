@@ -10,8 +10,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.auth.schemas import UserLoginSchema, UserRegisterSchema
+from app.auth.security import verify_password
 from app.auth.service import AuthService
-from app.auth.utils import verify_password
 from app.database.models.user import User
 
 

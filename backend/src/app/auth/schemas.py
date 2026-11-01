@@ -3,9 +3,21 @@ auth/schemas.py - 認証関連のPydanticスキーマ（TDD用）
 """
 
 from datetime import datetime
+from typing import Annotated
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import AfterValidator, BaseModel, ConfigDict, EmailStr, Field
+
+from app.auth.security import BCRYPT_MAX_BYTES
+
+
+def _fits_bcrypt(value: str) -> str:
+    if len(value.encode()) > BCRYPT_MAX_BYTES:
+        raise ValueError(f"パスワードは {BCRYPT_MAX_BYTES} バイト以内にしてください")
+    return value
+
+
+Password = Annotated[str, Field(min_length=8, max_length=255), AfterValidator(_fits_bcrypt)]
 
 
 class UserBase(BaseModel):
@@ -18,7 +30,7 @@ class UserBase(BaseModel):
 class UserRegisterSchema(UserBase):
     """ユーザー登録スキーマ"""
 
-    password: str = Field(..., min_length=8, max_length=255)
+    password: Password
 
 
 class UserLoginSchema(BaseModel):
@@ -65,18 +77,18 @@ class PasswordReset(BaseModel):
     """パスワードリセット実行スキーマ"""
 
     token: str
-    new_password: str = Field(..., min_length=8, max_length=255)
+    new_password: Password
 
 
 class PasswordChange(BaseModel):
     """パスワード変更スキーマ"""
 
     current_password: str
-    new_password: str = Field(..., min_length=8, max_length=255)
+    new_password: Password
 
 
 class PasswordResetConfirm(BaseModel):
     """パスワードリセット確認スキーマ"""
 
     token: str
-    new_password: str = Field(..., min_length=8, max_length=255)
+    new_password: Password

@@ -2,28 +2,40 @@
 auth/security.py - JWT・パスワードハッシング処理
 """
 
+import hashlib
 from datetime import UTC, datetime, timedelta
 from typing import Any, cast
 from uuid import UUID
 
+import bcrypt
 import jwt
 from jwt.exceptions import InvalidTokenError
-from passlib.context import CryptContext
 
 from app.config import settings
 
-# パスワードハッシング設定
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# bcrypt はこの長さを超える入力を扱えない（bcrypt 5 は ValueError を出す）
+BCRYPT_MAX_BYTES = 72
 
 
 def hash_password(password: str) -> str:
     """パスワードをbcryptでハッシング"""
-    return cast(str, pwd_context.hash(password))
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """パスワード検証"""
-    return cast(bool, pwd_context.verify(plain_password, hashed_password))
+    secret = plain_password.encode()
+    if len(secret) > BCRYPT_MAX_BYTES:
+        return False
+    try:
+        return bcrypt.checkpw(secret, hashed_password.encode())
+    except ValueError:
+        return False
+
+
+def hash_token(token: str) -> str:
+    """推測できない長いトークンを、検索に使える決まったハッシュにする"""
+    return hashlib.sha256(token.encode()).hexdigest()
 
 
 def create_jwt_token(data: dict, expires_delta: timedelta | None = None) -> str:
