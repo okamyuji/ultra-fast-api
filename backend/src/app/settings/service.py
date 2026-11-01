@@ -2,6 +2,7 @@
 settings/service.py - ユーザー設定サービス
 """
 
+from collections.abc import Sequence
 from datetime import UTC, datetime
 from uuid import UUID
 
@@ -118,7 +119,7 @@ class SettingsService:
             .where(RefreshToken.device_id == device_id)
             .where(RefreshToken.revoked_at.is_(None))
         )
-        tokens = result.scalars().all()
+        tokens: Sequence[RefreshToken] = result.scalars().all()
 
         if not tokens:
             raise ValueError("デバイスが見つかりません")
