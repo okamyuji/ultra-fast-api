@@ -26,7 +26,8 @@ services:
     container_name: ultra_fast_api
     environment:
       DATABASE_URL: postgresql+asyncpg://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-ultra_fast_db}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-your-secret-key-change-in-prod}
+      # 既定値は置かない。.env か環境変数で渡し、未設定ならアプリが起動時に止まる
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
       JWT_ALGORITHM: HS256
       ACCESS_TOKEN_EXPIRE_HOURS: 24
       REFRESH_TOKEN_EXPIRE_DAYS: 30
