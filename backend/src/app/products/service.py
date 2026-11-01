@@ -151,7 +151,7 @@ class ProductsService:
 
         # 実行
         result = await self.db.execute(query)
-        products = list(result.scalars().all())
+        products: list[Product] = list(result.scalars().all())
 
         # has_more判定
         has_more = len(products) > params.limit

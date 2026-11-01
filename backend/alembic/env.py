@@ -20,7 +20,7 @@ def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
     sqlalchemy_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://user:pass@localhost/db")
     # Use psycopg2 for migrations (sync driver)
-    sqlalchemy_url = sqlalchemy_url.replace("postgresql+asyncpg://", "postgresql://")
+    sqlalchemy_url = sqlalchemy_url.replace("postgresql+asyncpg://", "postgresql+psycopg2://")
 
     context.configure(
         url=sqlalchemy_url,
@@ -37,7 +37,7 @@ def run_migrations_online() -> None:
     """Run migrations in 'online' mode."""
     sqlalchemy_url = os.getenv("DATABASE_URL", "postgresql+asyncpg://user:pass@localhost/db")
     # Use psycopg2 for migrations (sync driver)
-    sqlalchemy_url = sqlalchemy_url.replace("postgresql+asyncpg://", "postgresql://")
+    sqlalchemy_url = sqlalchemy_url.replace("postgresql+asyncpg://", "postgresql+psycopg2://")
 
     configuration = config.get_section(config.config_ini_section)
     configuration["sqlalchemy.url"] = sqlalchemy_url

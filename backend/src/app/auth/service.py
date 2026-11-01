@@ -3,6 +3,7 @@ auth/service.py - 認証ビジネスロジック（TDD実装）
 """
 
 import re
+from collections.abc import Sequence
 from datetime import UTC, datetime, timedelta
 from typing import cast
 from uuid import UUID
@@ -259,7 +260,7 @@ class AuthService:
             query = query.where(RefreshToken.device_id == device_id)
 
         result = await self.db.execute(query)
-        tokens = result.scalars().all()
+        tokens: Sequence[RefreshToken] = result.scalars().all()
 
         if not tokens:
             return False
@@ -298,7 +299,7 @@ class AuthService:
             .where(PasswordResetToken.user_id == user.id)
             .where(PasswordResetToken.used_at.is_(None))
         )
-        existing_tokens = result.scalars().all()
+        existing_tokens: Sequence[PasswordResetToken] = result.scalars().all()
         for token in existing_tokens:
             token.used_at = datetime.now(UTC)
 
