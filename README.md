@@ -749,10 +749,23 @@ dart run build_runner build --delete-conflicting-outputs
 ```xml
 <key>NSAppTransportSecurity</key>
 <dict>
-    <key>NSAllowsArbitraryLoads</key>
-    <true/>
+    <key>NSExceptionDomains</key>
+    <dict>
+        <key>192.168.0.15</key>
+        <dict>
+            <key>NSExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+        </dict>
+        <key>localhost</key>
+        <dict>
+            <key>NSExceptionAllowsInsecureHTTPLoads</key>
+            <true/>
+        </dict>
+    </dict>
 </dict>
 ```
+
+開発に使うサーバーのアドレスだけを許します。すべての宛先への平文の通信を許す `NSAllowsArbitraryLoads` は使いません。
 
 **Android**: `android/app/src/main/AndroidManifest.xml`に追加
 
