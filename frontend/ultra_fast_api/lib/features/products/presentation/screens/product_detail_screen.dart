@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:ultra_fast_api/features/products/presentation/providers/products_notifier.dart';
 import 'package:ultra_fast_api/shared/widgets/loading_indicator.dart';
 

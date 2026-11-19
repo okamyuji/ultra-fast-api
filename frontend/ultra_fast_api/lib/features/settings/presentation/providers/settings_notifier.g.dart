@@ -10,7 +10,7 @@ part of 'settings_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(settingsApiService)
-const settingsApiServiceProvider = SettingsApiServiceProvider._();
+final settingsApiServiceProvider = SettingsApiServiceProvider._();
 
 final class SettingsApiServiceProvider
     extends
@@ -20,7 +20,7 @@ final class SettingsApiServiceProvider
           SettingsApiService
         >
     with $Provider<SettingsApiService> {
-  const SettingsApiServiceProvider._()
+  SettingsApiServiceProvider._()
     : super(
         from: null,
         argument: null,
@@ -58,11 +58,11 @@ String _$settingsApiServiceHash() =>
     r'7b0a6c3bd021621d70da7e849d8e209298abd08a';
 
 @ProviderFor(SettingsNotifier)
-const settingsProvider = SettingsNotifierProvider._();
+final settingsProvider = SettingsNotifierProvider._();
 
 final class SettingsNotifierProvider
     extends $NotifierProvider<SettingsNotifier, AsyncValue<UserSettings?>> {
-  const SettingsNotifierProvider._()
+  SettingsNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -95,8 +95,7 @@ abstract class _$SettingsNotifier extends $Notifier<AsyncValue<UserSettings?>> {
   AsyncValue<UserSettings?> build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref =
         this.ref as $Ref<AsyncValue<UserSettings?>, AsyncValue<UserSettings?>>;
     final element =
@@ -107,6 +106,6 @@ abstract class _$SettingsNotifier extends $Notifier<AsyncValue<UserSettings?>> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

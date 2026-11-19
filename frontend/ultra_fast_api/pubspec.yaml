@@ -14,7 +14,7 @@ dependencies:
 
   # State Management - Riverpod 3.x
   flutter_riverpod: ^3.0.2
-  riverpod_annotation: ^3.0.1
+  riverpod_annotation: ^4.0.8
 
   # HTTP Client
   dio: ^5.11.1
@@ -23,7 +23,7 @@ dependencies:
   flutter_secure_storage: ^11.2.0
 
   # Routing
-  go_router: ^16.2.5
+  go_router: ^18.1.4
 
   # UI Components
   cupertino_icons: ^2.0.0
@@ -33,6 +33,7 @@ dependencies:
   json_annotation: ^4.9.0
   freezed_annotation: ^3.0.1
 
+  material_ui: ^1.11.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -42,8 +43,7 @@ dev_dependencies:
 
   # Code Generation
   build_runner: ^2.15.1
-  riverpod_generator: ^3.0.2
-  custom_lint: ^0.8.0
+  riverpod_generator: ^4.0.10
   riverpod_lint: ^3.0.1
   json_serializable: ^6.11.2
 
@@ -51,8 +51,9 @@ dev_dependencies:
   mockito: ^5.5.0
 
   # Freezed
-  freezed: ^3.0.0
+  freezed: ^4.0.3
 
+  flutter_secure_storage_platform_interface: ^2.1.1
 flutter:
   uses-material-design: true
 

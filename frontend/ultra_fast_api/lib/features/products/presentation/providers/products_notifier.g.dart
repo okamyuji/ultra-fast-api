@@ -10,7 +10,7 @@ part of 'products_notifier.dart';
 // ignore_for_file: type=lint, type=warning
 
 @ProviderFor(productsApiService)
-const productsApiServiceProvider = ProductsApiServiceProvider._();
+final productsApiServiceProvider = ProductsApiServiceProvider._();
 
 final class ProductsApiServiceProvider
     extends
@@ -20,7 +20,7 @@ final class ProductsApiServiceProvider
           ProductsApiService
         >
     with $Provider<ProductsApiService> {
-  const ProductsApiServiceProvider._()
+  ProductsApiServiceProvider._()
     : super(
         from: null,
         argument: null,
@@ -58,11 +58,11 @@ String _$productsApiServiceHash() =>
     r'7f8f237d629861ce93952fa219fee3953339823a';
 
 @ProviderFor(ProductsNotifier)
-const productsProvider = ProductsNotifierProvider._();
+final productsProvider = ProductsNotifierProvider._();
 
 final class ProductsNotifierProvider
     extends $NotifierProvider<ProductsNotifier, ProductsState> {
-  const ProductsNotifierProvider._()
+  ProductsNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -95,8 +95,7 @@ abstract class _$ProductsNotifier extends $Notifier<ProductsState> {
   ProductsState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<ProductsState, ProductsState>;
     final element =
         ref.element
@@ -106,16 +105,16 @@ abstract class _$ProductsNotifier extends $Notifier<ProductsState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }
 
 @ProviderFor(ProductDetailNotifier)
-const productDetailProvider = ProductDetailNotifierFamily._();
+final productDetailProvider = ProductDetailNotifierFamily._();
 
 final class ProductDetailNotifierProvider
     extends $NotifierProvider<ProductDetailNotifier, Product?> {
-  const ProductDetailNotifierProvider._({
+  ProductDetailNotifierProvider._({
     required ProductDetailNotifierFamily super.from,
     required String super.argument,
   }) : super(
@@ -171,7 +170,7 @@ final class ProductDetailNotifierFamily extends $Family
           Product?,
           String
         > {
-  const ProductDetailNotifierFamily._()
+  ProductDetailNotifierFamily._()
     : super(
         retry: null,
         name: r'productDetailProvider',
@@ -194,8 +193,7 @@ abstract class _$ProductDetailNotifier extends $Notifier<Product?> {
   Product? build(String productId);
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build(_$args);
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<Product?, Product?>;
     final element =
         ref.element
@@ -205,6 +203,6 @@ abstract class _$ProductDetailNotifier extends $Notifier<Product?> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, () => build(_$args));
   }
 }

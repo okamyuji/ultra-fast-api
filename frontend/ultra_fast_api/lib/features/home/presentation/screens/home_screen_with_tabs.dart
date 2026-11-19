@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:ultra_fast_api/features/auth/presentation/providers/auth_notifier.dart';
 import 'package:ultra_fast_api/features/products/presentation/screens/products_list_screen.dart';
 import 'package:ultra_fast_api/features/settings/presentation/screens/settings_screen.dart';
