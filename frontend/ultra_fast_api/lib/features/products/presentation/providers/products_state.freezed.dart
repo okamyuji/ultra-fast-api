@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // coverage:ignore-file
-// ignore_for_file: type=lint
+// ignore_for_file: type=lint, type=warning, deprecated_member_use, deprecated_member_use_from_same_package
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'products_state.dart';
@@ -9,6 +9,7 @@ part of 'products_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
 // dart format off
 T _$identity<T>(T value) => value;
 /// @nodoc
@@ -20,7 +21,7 @@ mixin _$ProductsState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsState);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsState);
 }
 
 
@@ -29,7 +30,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ProductsState()';
+    return 'ProductsState()';
 }
 
 
@@ -188,7 +189,7 @@ return error(_that.message);case _:
 
 class ProductsInitial implements ProductsState {
   const ProductsInitial();
-
+  
 
 
 
@@ -197,7 +198,7 @@ class ProductsInitial implements ProductsState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsInitial);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsInitial);
 }
 
 
@@ -206,7 +207,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ProductsState.initial()';
+    return 'ProductsState.initial()';
 }
 
 
@@ -220,7 +221,7 @@ String toString() {
 
 class ProductsLoading implements ProductsState {
   const ProductsLoading();
-
+  
 
 
 
@@ -229,7 +230,7 @@ class ProductsLoading implements ProductsState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsLoading);
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsLoading);
 }
 
 
@@ -238,7 +239,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ProductsState.loading()';
+    return 'ProductsState.loading()';
 }
 
 
@@ -251,8 +252,8 @@ String toString() {
 
 
 class ProductsLoaded implements ProductsState {
-  const ProductsLoaded({required final  List<Product> products, this.nextCursor, required this.total, required this.hasMore, this.isLoadMoreError = false}): _products = products;
-
+  const ProductsLoaded({required  List<Product> products, this.nextCursor, required this.total, required this.hasMore, this.isLoadMoreError = false}): _products = products;
+  
 
  final  List<Product> _products;
  List<Product> get products {
@@ -276,16 +277,18 @@ $ProductsLoadedCopyWith<ProductsLoaded> get copyWith => _$ProductsLoadedCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsLoaded&&const DeepCollectionEquality().equals(other._products, _products)&&(identical(other.nextCursor, nextCursor) || other.nextCursor == nextCursor)&&(identical(other.total, total) || other.total == total)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isLoadMoreError, isLoadMoreError) || other.isLoadMoreError == isLoadMoreError));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsLoaded&&const DeepCollectionEquality().equals(other.products, _products)&&(identical(other.nextCursor, nextCursor) || other.nextCursor == nextCursor)&&(identical(other.total, total) || other.total == total)&&(identical(other.hasMore, hasMore) || other.hasMore == hasMore)&&(identical(other.isLoadMoreError, isLoadMoreError) || other.isLoadMoreError == isLoadMoreError));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),nextCursor,total,hasMore,isLoadMoreError);
+int get hashCode {
+    return Object.hash(runtimeType,const DeepCollectionEquality().hash(_products),nextCursor,total,hasMore,isLoadMoreError);
+}
 
 @override
 String toString() {
-  return 'ProductsState.loaded(products: $products, nextCursor: $nextCursor, total: $total, hasMore: $hasMore, isLoadMoreError: $isLoadMoreError)';
+    return 'ProductsState.loaded(products: $products, nextCursor: $nextCursor, total: $total, hasMore: $hasMore, isLoadMoreError: $isLoadMoreError)';
 }
 
 
@@ -332,7 +335,7 @@ as bool,
 
 class ProductsError implements ProductsState {
   const ProductsError(this.message);
-
+  
 
  final  String message;
 
@@ -346,16 +349,18 @@ $ProductsErrorCopyWith<ProductsError> get copyWith => _$ProductsErrorCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsError&&(identical(other.message, message) || other.message == message));
+    return identical(this, other) || (other.runtimeType == runtimeType&&other is ProductsError&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,message);
+int get hashCode {
+    return Object.hash(runtimeType,message);
+}
 
 @override
 String toString() {
-  return 'ProductsState.error(message: $message)';
+    return 'ProductsState.error(message: $message)';
 }
 
 

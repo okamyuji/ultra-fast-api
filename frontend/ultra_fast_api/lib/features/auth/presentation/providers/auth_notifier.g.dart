@@ -11,7 +11,7 @@ part of 'auth_notifier.dart';
 /// AuthApiService プロバイダー
 
 @ProviderFor(authApiService)
-const authApiServiceProvider = AuthApiServiceProvider._();
+final authApiServiceProvider = AuthApiServiceProvider._();
 
 /// AuthApiService プロバイダー
 
@@ -19,7 +19,7 @@ final class AuthApiServiceProvider
     extends $FunctionalProvider<AuthApiService, AuthApiService, AuthApiService>
     with $Provider<AuthApiService> {
   /// AuthApiService プロバイダー
-  const AuthApiServiceProvider._()
+  AuthApiServiceProvider._()
     : super(
         from: null,
         argument: null,
@@ -57,13 +57,13 @@ String _$authApiServiceHash() => r'2fa6578a04d8b1fc18facbc9c46cadf9ca237903';
 /// 認証 Notifier
 
 @ProviderFor(AuthNotifier)
-const authProvider = AuthNotifierProvider._();
+final authProvider = AuthNotifierProvider._();
 
 /// 認証 Notifier
 final class AuthNotifierProvider
     extends $NotifierProvider<AuthNotifier, AuthState> {
   /// 認証 Notifier
-  const AuthNotifierProvider._()
+  AuthNotifierProvider._()
     : super(
         from: null,
         argument: null,
@@ -90,7 +90,7 @@ final class AuthNotifierProvider
   }
 }
 
-String _$authNotifierHash() => r'faa4e04f9e038d49a68bbba607fb587e11aface9';
+String _$authNotifierHash() => r'd78da7d03f0f60a19aaf3a800d9ae53900de920e';
 
 /// 認証 Notifier
 
@@ -98,8 +98,7 @@ abstract class _$AuthNotifier extends $Notifier<AuthState> {
   AuthState build();
   @$mustCallSuper
   @override
-  void runBuild() {
-    final created = build();
+  WhenComplete runBuild() {
     final ref = this.ref as $Ref<AuthState, AuthState>;
     final element =
         ref.element
@@ -109,6 +108,6 @@ abstract class _$AuthNotifier extends $Notifier<AuthState> {
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    return element.handleCreate(ref, build);
   }
 }

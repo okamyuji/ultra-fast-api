@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:ultra_fast_api/features/auth/presentation/screens/login_screen.dart';
 import 'package:ultra_fast_api/features/auth/presentation/screens/register_screen.dart';
 import 'package:ultra_fast_api/features/home/presentation/screens/home_screen_with_tabs.dart';
