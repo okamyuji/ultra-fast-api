@@ -15,19 +15,19 @@ authors = [
 keywords = ["fastapi", "postgresql", "flutter", "async"]
 
 dependencies = [
-    "fastapi==0.163.1",
+    "fastapi==0.165.0",
     "starlette==1.10.0",
     "uvicorn[standard]==0.54.0",
-    "pydantic==2.14.3",
+    "pydantic==2.14.4",
     "pydantic-settings==2.16.3",
-    "sqlalchemy==2.1.8",
+    "sqlalchemy==2.1.9",
     "asyncpg==0.32.0",
     "alembic==1.20.1",
     # alembic/env.py は同期の psycopg2 ドライバでマイグレーションする
     "psycopg2-binary==2.9.13",
     "mako==1.4.3",
     "pyjwt[crypto]==2.15.1",
-    "python-multipart==0.0.33",
+    "python-multipart==0.0.34",
     "bcrypt==5.0.0",
     "python-dotenv==1.2.4",
     "httpx==0.28.1",
@@ -43,7 +43,7 @@ dev = [
     "pytest-cov==7.1.0",
     "pygments==2.21.0",
     "aiosqlite==0.22.1",
-    "ruff==0.17.5",
+    "ruff==0.17.6",
     "mypy==2.4.1",
     "ipython==9.18.1",
     "black==26.10.1",
